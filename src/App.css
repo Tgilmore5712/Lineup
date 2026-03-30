@@ -1,0 +1,394 @@
+.app-shell {
+  width: min(1100px, 92vw);
+  margin: 0 auto;
+  padding: 2.5rem 0 3rem;
+  display: grid;
+  gap: 1.2rem;
+}
+
+.list li > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.hero {
+  border-radius: 22px;
+  padding: 2rem;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(255, 229, 168, 0.8), transparent 38%),
+    radial-gradient(circle at 86% 78%, rgba(109, 160, 94, 0.3), transparent 42%),
+    linear-gradient(130deg, #fff5d6, #ffe8c2 38%, #f8ddb3 100%);
+  border: 2px solid #d39e56;
+  box-shadow: 0 14px 40px rgba(68, 41, 6, 0.14);
+  animation: hero-entry 620ms ease-out;
+}
+
+.eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.18rem;
+  font-weight: 700;
+  color: #994e12;
+}
+
+h1 {
+  margin: 0.2rem 0 0;
+  font-size: clamp(2rem, 4.2vw, 3.4rem);
+  line-height: 1;
+}
+
+.subtitle {
+  margin: 0.6rem 0 0;
+  max-width: 62ch;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.two-column {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.card {
+  background: #fffef8;
+  border: 2px solid #d7c8a7;
+  border-radius: 18px;
+  padding: 1rem;
+  box-shadow: 0 8px 20px rgba(39, 26, 9, 0.08);
+  animation: card-entry 380ms ease-out;
+}
+
+.card h2 {
+  margin: 0 0 0.8rem;
+  font-size: 1.3rem;
+}
+
+.inline-form {
+  display: flex;
+  gap: 0.55rem;
+  margin-bottom: 0.8rem;
+}
+
+input,
+select,
+button {
+  font: inherit;
+}
+
+input,
+select {
+  border: 1.6px solid #beae8a;
+  border-radius: 12px;
+  background: #fff;
+  padding: 0.52rem 0.7rem;
+}
+
+input {
+  flex: 1;
+}
+
+button {
+  border: 1.8px solid #1a5f2b;
+  background: #1a5f2b;
+  color: #fff;
+  border-radius: 12px;
+  padding: 0.45rem 0.72rem;
+  cursor: pointer;
+  font-weight: 700;
+  min-height: 40px;
+}
+
+button:hover {
+  filter: brightness(1.07);
+}
+
+button.ghost {
+  background: transparent;
+  color: #1a5f2b;
+}
+
+button.danger {
+  border-color: #964f2e;
+  color: #964f2e;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.ordered {
+  counter-reset: lineup;
+}
+
+.list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  border: 1px solid #eadfc7;
+  border-radius: 12px;
+  padding: 0.52rem;
+  background: #fffcf5;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.38rem;
+}
+
+.actions button {
+  padding: 0.32rem 0.58rem;
+  font-size: 0.85rem;
+}
+
+.muted {
+  color: #5b543e;
+}
+
+.compact {
+  margin-top: 0.6rem;
+  font-size: 0.9rem;
+}
+
+.card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 0.8rem;
+}
+
+.position-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.62rem;
+}
+
+.position-cell {
+  display: grid;
+  gap: 0.42rem;
+  padding: 0.58rem;
+  border-radius: 12px;
+  background: #fff9e9;
+  border: 1px solid #e2d1ab;
+}
+
+.position-cell span {
+  font-weight: 700;
+  color: #4b3411;
+}
+
+.alert {
+  margin: 0.8rem 0 0;
+  border: 1px solid #964f2e;
+  border-radius: 10px;
+  background: #fce5da;
+  padding: 0.55rem 0.7rem;
+  color: #702f10;
+  font-weight: 600;
+}
+
+.field-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 0.6rem 0.2rem 0.2rem;
+}
+
+.field {
+  position: relative;
+  width: min(700px, 100%);
+  aspect-ratio: 1.35 / 1;
+  border-radius: 18px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at center 98%, #f4c285 0 28%, transparent 29%),
+    linear-gradient(180deg, #95c778 0%, #6da65d 100%);
+  border: 2px solid #417735;
+}
+
+.infield-diamond {
+  position: absolute;
+  width: 34%;
+  aspect-ratio: 1;
+  left: 33%;
+  top: 52%;
+  background: rgba(251, 211, 156, 0.95);
+  border: 2px solid rgba(146, 90, 31, 0.55);
+  transform: rotate(45deg);
+}
+
+.outfield-arc {
+  position: absolute;
+  width: 122%;
+  height: 122%;
+  left: -11%;
+  top: -55%;
+  border-radius: 50%;
+  border: 2px dashed rgba(233, 244, 215, 0.75);
+}
+
+.position-marker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: grid;
+  gap: 0.1rem;
+  text-align: center;
+  width: clamp(64px, 11vw, 82px);
+  padding: 0.38rem 0.4rem;
+  border-radius: 12px;
+  background: rgba(255, 252, 242, 0.95);
+  border: 1px solid #c79f60;
+  box-shadow: 0 3px 10px rgba(43, 31, 11, 0.16);
+}
+
+.position-marker strong {
+  font-size: 0.78rem;
+  letter-spacing: 0.03rem;
+  color: #65380e;
+}
+
+.position-marker span {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #22411c;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.status-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  justify-content: space-between;
+  font-weight: 700;
+  color: #4f3f1f;
+  border: 1px dashed #bd9f66;
+  border-radius: 12px;
+  padding: 0.62rem 0.8rem;
+}
+
+@keyframes hero-entry {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes card-entry {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 960px) {
+  .app-shell {
+    width: min(940px, 95vw);
+    padding-top: 1.5rem;
+  }
+
+  .two-column {
+    grid-template-columns: 1fr;
+  }
+
+  .position-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .app-shell {
+    width: 96vw;
+    gap: 0.85rem;
+    padding-bottom: 1.2rem;
+  }
+
+  .hero,
+  .card {
+    padding: 0.75rem;
+    border-radius: 14px;
+  }
+
+  .subtitle {
+    font-size: 0.92rem;
+  }
+
+  .inline-form {
+    flex-direction: column;
+  }
+
+  .actions {
+    width: 100%;
+  }
+
+  .actions button {
+    flex: 1;
+  }
+
+  .card-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .card-head .actions {
+    width: 100%;
+  }
+
+  .card-head .actions button {
+    flex: 1;
+  }
+
+  .position-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .list li {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .field-wrap {
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding-bottom: 0.4rem;
+  }
+
+  .field {
+    min-width: 340px;
+  }
+
+  .position-marker {
+    width: 58px;
+    padding: 0.28rem;
+  }
+
+  .position-marker strong {
+    font-size: 0.66rem;
+  }
+
+  .position-marker span {
+    font-size: 0.62rem;
+  }
+
+  .status-bar {
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.93rem;
+  }
+}
