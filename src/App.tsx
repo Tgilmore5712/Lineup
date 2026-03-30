@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import './App.css'
 
 type Player = {
@@ -6,7 +6,92 @@ type Player = {
   name: string
 }
 
+type PersistedState = {
+  players: Player[]
+  nextId: number
+  battingOrder: number[]
+  positions: Record<string, number | ''>
+}
+
 const POSITIONS = ['P', 'C', '1B', '2B', '3B', 'SS', 'LF', 'LCF', 'RCF', 'RF']
+const STORAGE_KEY = 'lineup-lab-state-v1'
+const DEFAULT_PLAYERS: Player[] = [
+  { id: 1, name: 'Kyla Weir' },
+  { id: 2, name: 'Mariah Abreu' },
+  { id: 3, name: 'Hazel Miller' },
+  { id: 4, name: 'Kasey Montgomery' },
+  { id: 5, name: 'Leah Kelly' },
+  { id: 6, name: 'Sophia Usner' },
+  { id: 7, name: 'Kaylee Osborn' },
+  { id: 8, name: 'Emily Salter' },
+  { id: 9, name: 'Gwynn Martinez' },
+  { id: 10, name: 'Peyton Allison' },
+  { id: 11, name: 'Olivia Lausch' },
+  { id: 12, name: 'Katelyn Oberholtzer' },
+  { id: 13, name: 'Wynter Yarnall' },
+  { id: 14, name: 'Abigail Gilmore' },
+]
+const DEFAULT_BATTING_ORDER = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+const createEmptyPositions = (): Record<string, number | ''> =>
+  Object.fromEntries(POSITIONS.map((position) => [position, ''])) as Record<
+    string,
+    number | ''
+  >
+
+const readPersistedState = (): PersistedState | null => {
+  if (typeof window === 'undefined') {
+    return null
+  }
+
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY)
+    if (!raw) {
+      return null
+    }
+
+    const parsed = JSON.parse(raw) as Partial<PersistedState>
+    if (!Array.isArray(parsed.players) || !Array.isArray(parsed.battingOrder)) {
+      return null
+    }
+
+    const players = parsed.players
+      .filter((player) => typeof player?.id === 'number' && typeof player?.name === 'string')
+      .map((player) => ({ id: player.id, name: player.name }))
+
+    if (players.length === 0) {
+      return null
+    }
+
+    const battingOrder = parsed.battingOrder.filter(
+      (playerId): playerId is number => typeof playerId === 'number',
+    )
+
+    const positions = createEmptyPositions()
+    if (parsed.positions && typeof parsed.positions === 'object') {
+      for (const position of POSITIONS) {
+        const value = (parsed.positions as Record<string, unknown>)[position]
+        positions[position] = typeof value === 'number' ? value : ''
+      }
+    }
+
+    const maxId = Math.max(...players.map((player) => player.id))
+    const nextId =
+      typeof parsed.nextId === 'number' && parsed.nextId > maxId
+        ? parsed.nextId
+        : maxId + 1
+
+    return {
+      players,
+      nextId,
+      battingOrder,
+      positions,
+    }
+  } catch {
+    return null
+  }
+}
+
 const POSITION_COORDS: Record<string, { x: number; y: number }> = {
   P: { x: 50, y: 64 },
   C: { x: 50, y: 84 },
@@ -21,28 +106,28 @@ const POSITION_COORDS: Record<string, { x: number; y: number }> = {
 }
 
 function App() {
-  const [players, setPlayers] = useState<Player[]>([
-    { id: 1, name: 'Kyla Weir' },
-    { id: 2, name: 'Mariah Abreu' },
-    { id: 3, name: 'Hazel Miller' },
-    { id: 4, name: 'Kasey Montgomery' },
-    { id: 5, name: 'Leah Kelly' },
-    { id: 6, name: 'Sophia Usner' },
-    { id: 7, name: 'Kaylee Osborn' },
-    { id: 8, name: 'Emily Salter' },
-    { id: 9, name: 'Gwynn Martinez' },
-    { id: 10, name: 'Peyton Allison' },
-    { id: 11, name: 'Olivia Lausch' },
-    { id: 12, name: 'Katelyn Oberholtzer' },
-    { id: 13, name: 'Wynter Yarnall' },
-    { id: 14, name: 'Abigail Gilmore' },
-  ])
-  const [nextId, setNextId] = useState(15)
-  const [newPlayerName, setNewPlayerName] = useState('')
-  const [battingOrder, setBattingOrder] = useState<number[]>([1, 2, 3, 4, 5, 6, 7, 8, 9])
-  const [positions, setPositions] = useState<Record<string, number | ''>>(
-    Object.fromEntries(POSITIONS.map((position) => [position, ''])),
+  const persistedState = readPersistedState()
+  const [players, setPlayers] = useState<Player[]>(
+    persistedState?.players ?? DEFAULT_PLAYERS,
   )
+  const [nextId, setNextId] = useState(persistedState?.nextId ?? 15)
+  const [newPlayerName, setNewPlayerName] = useState('')
+  const [battingOrder, setBattingOrder] = useState<number[]>(
+    persistedState?.battingOrder ?? DEFAULT_BATTING_ORDER,
+  )
+  const [positions, setPositions] = useState<Record<string, number | ''>>(
+    persistedState?.positions ?? createEmptyPositions(),
+  )
+
+  useEffect(() => {
+    const payload: PersistedState = {
+      players,
+      nextId,
+      battingOrder,
+      positions,
+    }
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(payload))
+  }, [players, nextId, battingOrder, positions])
 
   const playersById = useMemo(
     () => new Map(players.map((player) => [player.id, player])),
@@ -126,7 +211,7 @@ function App() {
   }
 
   const clearDefense = () => {
-    setPositions(Object.fromEntries(POSITIONS.map((position) => [position, ''])))
+    setPositions(createEmptyPositions())
   }
 
   const getPlayerPosition = (playerId: number) => {
